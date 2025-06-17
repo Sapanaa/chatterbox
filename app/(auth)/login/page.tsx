@@ -1,9 +1,10 @@
+import { SignInForm } from '@/components/SignInForm'
 import React from 'react'
 
 const page = () => {
   return (
     <div>
-      Dashboard page
+      <SignInForm />
     </div>
   )
 }
