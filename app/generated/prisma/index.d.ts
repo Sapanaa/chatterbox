@@ -10478,7 +10478,7 @@ export namespace Prisma {
   }
 
   export type MemberCreateInput = {
-    id: string
+    id?: string
     role?: $Enums.MemberRole
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
@@ -10487,7 +10487,7 @@ export namespace Prisma {
   }
 
   export type MemberUncheckedCreateInput = {
-    id: string
+    id?: string
     role?: $Enums.MemberRole
     userId: string
     serverId: string
@@ -10514,7 +10514,7 @@ export namespace Prisma {
   }
 
   export type MemberCreateManyInput = {
-    id: string
+    id?: string
     role?: $Enums.MemberRole
     userId: string
     serverId: string
@@ -10539,7 +10539,7 @@ export namespace Prisma {
   }
 
   export type ChannelCreateInput = {
-    id: string
+    id?: string
     name: string
     type?: $Enums.ChannelType
     createdAt?: Date | string | null
@@ -10549,7 +10549,7 @@ export namespace Prisma {
   }
 
   export type ChannelUncheckedCreateInput = {
-    id: string
+    id?: string
     name: string
     type?: $Enums.ChannelType
     userId: string
@@ -10579,7 +10579,7 @@ export namespace Prisma {
   }
 
   export type ChannelCreateManyInput = {
-    id: string
+    id?: string
     name: string
     type?: $Enums.ChannelType
     userId: string
@@ -11693,7 +11693,7 @@ export namespace Prisma {
   }
 
   export type MemberCreateWithoutUserInput = {
-    id: string
+    id?: string
     role?: $Enums.MemberRole
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
@@ -11701,7 +11701,7 @@ export namespace Prisma {
   }
 
   export type MemberUncheckedCreateWithoutUserInput = {
-    id: string
+    id?: string
     role?: $Enums.MemberRole
     serverId: string
     createdAt?: Date | string | null
@@ -11719,7 +11719,7 @@ export namespace Prisma {
   }
 
   export type ChannelCreateWithoutUserInput = {
-    id: string
+    id?: string
     name: string
     type?: $Enums.ChannelType
     createdAt?: Date | string | null
@@ -11728,7 +11728,7 @@ export namespace Prisma {
   }
 
   export type ChannelUncheckedCreateWithoutUserInput = {
-    id: string
+    id?: string
     name: string
     type?: $Enums.ChannelType
     serverId: string
@@ -12145,7 +12145,7 @@ export namespace Prisma {
   }
 
   export type MemberCreateWithoutServerInput = {
-    id: string
+    id?: string
     role?: $Enums.MemberRole
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
@@ -12153,7 +12153,7 @@ export namespace Prisma {
   }
 
   export type MemberUncheckedCreateWithoutServerInput = {
-    id: string
+    id?: string
     role?: $Enums.MemberRole
     userId: string
     createdAt?: Date | string | null
@@ -12171,7 +12171,7 @@ export namespace Prisma {
   }
 
   export type ChannelCreateWithoutServerInput = {
-    id: string
+    id?: string
     name: string
     type?: $Enums.ChannelType
     createdAt?: Date | string | null
@@ -12180,7 +12180,7 @@ export namespace Prisma {
   }
 
   export type ChannelUncheckedCreateWithoutServerInput = {
-    id: string
+    id?: string
     name: string
     type?: $Enums.ChannelType
     userId: string
@@ -12543,7 +12543,7 @@ export namespace Prisma {
   }
 
   export type MemberCreateManyUserInput = {
-    id: string
+    id?: string
     role?: $Enums.MemberRole
     serverId: string
     createdAt?: Date | string | null
@@ -12551,7 +12551,7 @@ export namespace Prisma {
   }
 
   export type ChannelCreateManyUserInput = {
-    id: string
+    id?: string
     name: string
     type?: $Enums.ChannelType
     serverId: string
@@ -12742,7 +12742,7 @@ export namespace Prisma {
   }
 
   export type MemberCreateManyServerInput = {
-    id: string
+    id?: string
     role?: $Enums.MemberRole
     userId: string
     createdAt?: Date | string | null
@@ -12750,7 +12750,7 @@ export namespace Prisma {
   }
 
   export type ChannelCreateManyServerInput = {
-    id: string
+    id?: string
     name: string
     type?: $Enums.ChannelType
     userId: string

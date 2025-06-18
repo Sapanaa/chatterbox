@@ -98,7 +98,7 @@ enum MemberRole{
 }
 
 model Member {
-  id String @id
+  id String @id @default(uuid()) 
   role MemberRole @default(GUEST)
 
   userId String 
@@ -121,7 +121,7 @@ enum ChannelType{
 }
 
 model Channel {
-  id String @id
+  id String @id @default(uuid()) 
   name String
   type ChannelType @default(TEXT)
 
