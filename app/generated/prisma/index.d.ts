@@ -9889,19 +9889,19 @@ export namespace Prisma {
 
   export type ServerWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    inviteCode?: string
     AND?: ServerWhereInput | ServerWhereInput[]
     OR?: ServerWhereInput[]
     NOT?: ServerWhereInput | ServerWhereInput[]
     name?: StringFilter<"Server"> | string
     imageUrl?: StringFilter<"Server"> | string
-    inviteCode?: StringFilter<"Server"> | string
     userId?: StringFilter<"Server"> | string
     createdAt?: DateTimeNullableFilter<"Server"> | Date | string | null
     updatedAt?: DateTimeNullableFilter<"Server"> | Date | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     members?: MemberListRelationFilter
     channels?: ChannelListRelationFilter
-  }, "id">
+  }, "id" | "inviteCode">
 
   export type ServerOrderByWithAggregationInput = {
     id?: SortOrder

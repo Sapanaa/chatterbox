@@ -6,7 +6,7 @@ export default async function Page() {
   const user = await getCurrentUser();
 
   if (!user) {
-    return redirect("/sign-in");
+    return redirect("/login");
   }
 
   const server = await prisma.server.findFirst({
@@ -19,9 +19,9 @@ export default async function Page() {
     },
   });
 
-  // if (server) {
-  //   return redirect(`/servers/${server.id}`);
-  // }
+  if (server) {
+    return redirect(`/servers/${server.id}`);
+  }
 
   return (
     <div>
