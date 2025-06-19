@@ -65,7 +65,7 @@ const ServerHeader = ({server, role}: ServerHeaderProps) => {
                     </DropdownMenuItem>
                 )}
                 {isAdmin && (
-                    <DropdownMenuItem >
+                    <DropdownMenuItem onClick={() => onOpen('deleteServer', {server})} >
                         Delete Server
                         <DropdownMenuShortcut>⌘+D</DropdownMenuShortcut>
                     </DropdownMenuItem>
