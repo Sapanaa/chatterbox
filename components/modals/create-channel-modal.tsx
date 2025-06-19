@@ -1,5 +1,5 @@
 'use client'
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -44,18 +44,27 @@ const formSchema = z.object({
 });
 
 export function CreateChannelModal() {
-  const { isOpen, onClose, type } = useModal()
+  const { isOpen, onClose, type , data} = useModal()
   const params = useParams();
-
+  const {channelType} = data;
   const isModalOpen = isOpen && type === "createChannel"; // <- use the type here
   const [isloading, setIsLoading] = useState(false);  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      type: ChannelType.TEXT,
+      type: channelType || ChannelType.TEXT,
     },
   });
+
+  useEffect(() => {
+    if (channelType) {
+      form.setValue("type", channelType);
+    }
+    else {
+      form.setValue("type", ChannelType.TEXT);
+    }
+  }, [channelType, form]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
