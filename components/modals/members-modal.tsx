@@ -1,83 +1,117 @@
 'use client'
-import React from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useModal } from "@/hooks/use-modal-store";
-import { Label } from "@radix-ui/react-label";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import  { Check, Copy, RefreshCw } from "lucide-react"
-import { useOrigin } from "@/hooks/use-origin";
-import { useState } from "react";
+import { ServerWithMembersWithProfiles } from "@/types";
+import { ScrollArea } from "@/components/ui/scroll-area"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Check, MoreVertical } from "lucide-react";
+import { DropdownMenuSubContent, DropdownMenuSubTrigger } from "@radix-ui/react-dropdown-menu";
+import { Loader2 } from "lucide-react";
+import { MemberRole } from "@/app/generated/prisma";
+import qs from "query-string";
 import axios from "axios";
-
+import { useRouter } from "next/navigation";
+import { on } from "events";
 
 export function MembersModal() {
-  const { isOpen, onOpen, onClose, type, data } = useModal();
-  const origin = useOrigin();
+  const router = useRouter();
+  const { isOpen,onOpen, onClose, type, data } = useModal();
+
+  const [loadingId, setLoadingId] = useState("");
 
 
 
 
 
-  const isModalOpen = isOpen && type === "invite"; // <- use the type here
-  const {server} = data ;
-  console.log(server)
+  const isModalOpen = isOpen && type === "members"; // <- use the type here
+  const {server} = data as {server: ServerWithMembersWithProfiles};
 
-  const [copied, setCopied] = useState(false);  
-  const [isLoading, setIsLoading] = useState(false);
+  const onRoleChange  =async  (memberId: string, role: MemberRole) => {
+      try{
 
-  const inviteUrl = `${origin}/invite/${server?.inviteCode}`
+        setLoadingId(memberId);
+        const url = qs.stringifyUrl({
+          url: `/api/members/${memberId}`,
+          query: {
+            serverId: server?.id,
+            memberId,
+          }
+        })
 
-  const onCopy = () => {
-    navigator.clipboard.writeText(inviteUrl);
-    setCopied(true);
-
-    setTimeout(() => {
-      setCopied(false);
-    }, 1000);
-  }
-
-  const onNew =async () => {
-    try{
-        setIsLoading(true)
-        const response = await axios.patch(`/api/servers/${server?.id}/inviteCode`);
-        onOpen("invite", {server: response.data})
+        const response = await axios.patch(url, {role});
+        router.refresh();
+        onOpen("members", {server: response.data})
         
-    }
-    catch(e){
-      console.log(e)
-    }
-    finally{
-      setIsLoading(false)
-    }
+
+      }
+      catch(e){
+        console.log(e)
+      }
+      finally {
+        setLoadingId("");
+      }
   }
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Invite Friends</DialogTitle>
-          
+          <DialogTitle>Manage Members</DialogTitle>
+           <DialogDescription className="text-center">
+            {server?.members?.length} Members
+          </DialogDescription>
         </DialogHeader>
-      <div className="p-6">
-         <Label>Server Invite Link here</Label>
-        <div className="flex items-center mt-2 ">
-      <Input disabled={isLoading} className="h-9" placeholder="Invite Link"  value={inviteUrl} />
-      <Button  disabled={isLoading} className="ml-4" onClick={onCopy}>
-        {copied ? <Check className="w-4 h-4" /> :<Copy />}
-        </Button>
-        </div>
-        <div className="flex items-center gap-3">
-<Button onClick={onNew} disabled={isLoading} className="mt-6 p-3 ">Generate New Link</Button>
-        <RefreshCw className="w-5 h-5 ml-2"/>
-        </div>
-        
-      </div>
+         <ScrollArea className="mt-8 max-h-[420px] pr-6">
+          {server?.members?.map((member) => (
+            <div key={member.id} className="flex items-center gap-x-2">
+              
+              <div className="flex flex-col gap-y-1 leading-none">
+                <p className="font-semibold">{member.user.name}</p>
+                <p className="text-xs text-zinc-500">{member.user.email}</p>
+                <p className="text-xs text-zinc-500">{member.role}</p>
+              </div>
+              {server.userId != member.user.id && loadingId !== member.id && (
+                <div className="ml-auto">
+                  <DropdownMenu>
+  <DropdownMenuTrigger><MoreVertical /></DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuSub> 
+      <DropdownMenuSubTrigger>Role</DropdownMenuSubTrigger>
+      <DropdownMenuSubContent>
+        <DropdownMenuItem onClick={() => onRoleChange(member.id, "GUEST")}>Guest {member.role === "GUEST" && <Check className="w-4 h-4 ml-2" />}</DropdownMenuItem>
+
+        <DropdownMenuItem onClick={() => onRoleChange(member.id, "MODERATOR")}>Moderator {member.role === "MODERATOR" && <Check className="w-4 h-4 ml-2" />}</DropdownMenuItem>
+      </DropdownMenuSubContent>
+    </DropdownMenuSub>
+    <DropdownMenuSeparator />
+
+    <DropdownMenuItem>Kick</DropdownMenuItem>
+    
+  </DropdownMenuContent>
+</DropdownMenu>
+                </div>
+
+              )}
+              {loadingId === member.id && (
+                <Loader2 className="animate-spin text-zinc-500 ml-auto w-4 h-4" />
+              )}
+            </div>
+          ))}
+          </ScrollArea>
       </DialogContent>
     </Dialog>
   );
