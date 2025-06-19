@@ -2,6 +2,51 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/current-user";
 
+export async function DELETE(req: NextRequest, { params }: { params: { memberId: string } }) {
+  try {
+    const user = await getCurrentUser();
+    const { searchParams } = new URL(req.url);
+    const serverId = searchParams.get("serverId");
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    const memberId = params.memberId;
+    if(!memberId) return NextResponse.json({ error: "Missing memberId" }, { status: 400 });
+    if(!serverId) return NextResponse.json({ error: "Missing serverId" }, { status: 400 });
+    // Optional: check if user has permission to delete this member
+
+    const server = await prisma.server.update({
+        where: {
+            id: serverId,
+            userId: user.id
+        },
+        data: {
+            members: {
+                deleteMany: {
+                    id: memberId,
+                    userId: {
+                        not: user.id
+                    }
+                }
+        }
+        },
+        include: {
+            members: {
+                include: {
+                    user: true
+                },
+                orderBy: {
+                    role: "asc",
+                },
+            },
+        }
+    })
+
+    return NextResponse.json(server);
+  } catch (error) {
+    console.error("DELETE error:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
+}
 export async function PATCH(req: NextRequest, { params }: { params: { memberId: string } }) {
   try {
     const user = await getCurrentUser();

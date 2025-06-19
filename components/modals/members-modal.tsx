@@ -25,7 +25,6 @@ import { MemberRole } from "@/app/generated/prisma";
 import qs from "query-string";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { on } from "events";
 
 export function MembersModal() {
   const router = useRouter();
@@ -40,8 +39,29 @@ export function MembersModal() {
   const isModalOpen = isOpen && type === "members"; // <- use the type here
   const {server} = data as {server: ServerWithMembersWithProfiles};
 
+  const onKick = async (memberId: string) => {
+    try {
+      setLoadingId(memberId);
+      const url = qs.stringifyUrl({
+        url: `/api/members/${memberId}`,
+        query: {
+          serverId: server?.id,
+
+        }
+      })
+      const response = await axios.delete(url);
+      router.refresh();
+      onOpen("members", {server: response.data})
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoadingId("");
+    }
+  }
   const onRoleChange  =async  (memberId: string, role: MemberRole) => {
-      try{
+      
+    
+    try{
 
         setLoadingId(memberId);
         const url = qs.stringifyUrl({
@@ -99,7 +119,7 @@ export function MembersModal() {
     </DropdownMenuSub>
     <DropdownMenuSeparator />
 
-    <DropdownMenuItem>Kick</DropdownMenuItem>
+    <DropdownMenuItem onClick={() => onKick(member.id)}>Kick</DropdownMenuItem>
     
   </DropdownMenuContent>
 </DropdownMenu>

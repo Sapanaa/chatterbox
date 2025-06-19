@@ -59,8 +59,8 @@ const ServerHeader = ({server, role}: ServerHeaderProps) => {
                     </DropdownMenuItem>
                 )}
                 {isModerator && (
-                    <DropdownMenuItem>
-                        Manage Channels
+                    <DropdownMenuItem onClick={() => onOpen('createChannel', {server})}>
+                        Create Channels
                         <DropdownMenuShortcut>⌘+K</DropdownMenuShortcut>
                     </DropdownMenuItem>
                 )}
