@@ -2,8 +2,8 @@ import { useEffect } from "react"
 import { useState } from "react"
 
 type ChatScrollProps = {
-    chatRef: React.RefObject<HTMLElement>
-    bottomRef: React.RefObject<HTMLElement>
+    chatRef: React.RefObject<HTMLElement | null>
+    bottomRef: React.RefObject<HTMLElement | null>
     shouldLoadMore: boolean 
     loadMore : () => void
     count: number

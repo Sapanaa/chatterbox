@@ -30,22 +30,12 @@ interface ChatMessageProps {
 export const ChatMessage = (
     {name, member, chatId, apiUrl, socketUrl, socketQuery, paramKey,paramValue, type}: ChatMessageProps
 ) => {
-        const chatRef = useRef<ElementRef<"div">>(null)
-        const bottomRef = useRef<ElementRef<"div">>(null)
+        const chatRef = useRef<HTMLElement>(null)
+        const bottomRef = useRef<HTMLElement>(null)
             const {data, fetchNextPage, hasNextPage, isFetchingNextPage, status} = useChatQuery({queryKey: `chat:${chatId}`, apiUrl, paramKey, paramValue});
     useChatSocket({addKey: `chat:${chatId}:messages`, updateKey: `chat:${chatId}:messages:update`, queryKey: `chat:${chatId}`});
         useScroll({chatRef, bottomRef,loadMore: fetchNextPage, shouldLoadMore: !isFetchingNextPage && !hasNextPage, count: data?.pages?.[0]?.items?.length || 0})
-            if (status === "loading") {
-                return (
-                  <div className="flex flex-col flex-1 justify-center items-center">
-                    <div className="animate-spin inline-block w-8 h-8 border-[3px] border-current border-t-transparent text-blue-600 rounded-full" />
-                    <p className="text-xs text-gray-500 mt-2">
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
-                      LoadingMessages
-                    </p>
-                  </div>
-                )
-            }
+          
 
                 if (status === "error") {
                 return (
