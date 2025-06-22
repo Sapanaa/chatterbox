@@ -3,6 +3,7 @@ import { Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider"
 import { ModalProvider } from "@/components/providers/modal-provider";
+import { SocketProvider } from "@/components/providers/socket-provider";
 
 const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
@@ -24,14 +25,17 @@ export default function RootLayout({
       <body
         className={`${bricolage.variable}  antialiased`}
       >
+
          <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >
+            <SocketProvider>
             <ModalProvider />
             {children}
+            </SocketProvider>
           </ThemeProvider>
       </body>
     </html>

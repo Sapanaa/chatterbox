@@ -108,7 +108,7 @@ const ServerSidebar =async ({serverId}: ServerSidebarProps) => {
                     label: "Members",
                     type: "member",
                     data: members?.map((member) => ({
-                        id: member.userId,
+                        id: member.id,
                         name: member.user.name,
                         icon: roleIconMap[member.role],
                     }))

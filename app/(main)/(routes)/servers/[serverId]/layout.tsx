@@ -5,7 +5,7 @@ import ServerSidebar from "@/components/server/server-sidebar";
 
 const serverLayout = async (props: { children: React.ReactNode; params: { serverId: string } }) => {
   const { children, params } = props;
-  const { serverId } = params;
+  const serverId = params.serverId;
 
   const user = await getCurrentUser();
 
