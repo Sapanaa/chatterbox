@@ -71,11 +71,10 @@ const ServerSidebar =async ({serverId}: ServerSidebarProps) => {
     const role = server.members.find((member) => member.userId === user.id)?.role;
 
   return (
-    <div className='flex flex-col h-full text-primary w-full  dark:bg-[#2B2] bg-[#F2F3F5]'>
-        Server Channel
+    <div className='flex flex-col h-full w-full bg-[#F2F3F5] dark:bg-[#1E1E2F] text-primary dark:text-zinc-300'>
     <ServerHeader server={server} role={role}/>
       <ScrollArea className="flex-1 px-3">
-        <div>
+        <div className="px-4 py-3 border-b border-zinc-300 dark:border-zinc-700">
             <ServerSearch data={[
                 {
                     label: "Text Channels",

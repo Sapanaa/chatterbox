@@ -1,7 +1,4 @@
-
 import NavigationSidebar from "@/components/navigation/NavigationSidebar";
-
-
 
 export default function Layout({
   children,
@@ -9,14 +6,16 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="h-full">
-        <div className="hidden md:flex h-full w-[72px] z-30 flex-col fixed inset-y-0">
-            <NavigationSidebar/>
-        </div>
-        <main className="md:pl-[72px] h-full">
-            {children}
-        </main>
+    <div className="h-full w-full bg-background text-foreground">
+      {/* Sidebar */}
+      <aside className="hidden md:flex fixed inset-y-0 w-[72px] z-30 flex-col bg-white dark:bg-zinc-900 shadow-lg border-r">
+        <NavigationSidebar />
+      </aside>
 
+      {/* Main Content */}
+      <main className="md:pl-[72px] h-full w-full overflow-y-auto">
+        <div className="h-full p-4">{children}</div>
+      </main>
     </div>
   );
 }

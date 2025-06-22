@@ -54,16 +54,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     
         if(!conversation) return res.status(404).json({error: "Conversation not found"});
 
-        const 
+        const member = conversation.memberOne.userId === user.id ? conversation.memberOne : conversation.memberTwo;
 
-        const member = server.members.find((member) => member.userId === user.id);
 
         if(!member) return res.status(404).json({error: "Member not found"});
 
-        let message = await prisma.message.findFirst({
+        let directMessage = await prisma.directMesage.findFirst({
             where: {
-                id: messageId as string,
-                channelId: channelId as string
+                id: directMessageId as string,
+                conversationId: conversationId as string
             },
             include: {
                 member: {
@@ -74,10 +73,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
             }
         });
 
-        if(!message || message.deleted) return res.status(404).json({error: "Message not found"});
+        if(!directMessage || directMessage.deleted) return res.status(404).json({error: "Message not found"});
 
-        if(message.memberId !== member.id) return res.status(401).json({error: "Unauthorized"});
-        const isMessageOwner = message.memberId === member.id;
+        if(directMessage.memberId !== member.id) return res.status(401).json({error: "Unauthorized"});
+        const isMessageOwner = directMessage.memberId === member.id;
         const isAdmin = member.role === MemberRole.ADMIN
         const isModerator = member.role === MemberRole.MODERATOR
         const canModify = isMessageOwner || isAdmin || isModerator;
@@ -85,9 +84,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
         if(!canModify) return res.status(401).json({error: "Unauthorized"});
 
         if(req.method == "DELETE") {
-            message = await prisma.message.update({
+            directMessage = await prisma.directMesage.update({
                 where: {
-                    id: messageId as string
+                    id: directMessageId as string
                 },
                 data: {
                     fileUrl: null,
@@ -106,9 +105,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
         
         if(req.method == "PATCH") {
             if(!isMessageOwner) return res.status(401).json({error: "Unauthorized"});
-            message = await prisma.message.update({
+            directMessage = await prisma.directMesage.update({
                 where: {
-                    id: messageId as string
+                    id: directMessageId as string
                 },
                 data: {
                     content,
@@ -123,11 +122,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
             });
         }
 
-        const updateKey = `chat:${channelId}:messages:update`;
+        const updateKey = `chat:${conversation.id}:messages:update`;
 
-        res?.socket?.server?.io?.emit(updateKey, message);
+        res?.socket?.server?.io?.emit(updateKey, directMessage);
 
-        return res.status(200).json(message);
+        return res.status(200).json(directMessage);
 
     }
     catch(error) {
