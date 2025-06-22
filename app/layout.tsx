@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider"
 import { ModalProvider } from "@/components/providers/modal-provider";
 import { SocketProvider } from "@/components/providers/socket-provider";
+import QueryProvider from "@/components/providers/query-provider";
 
 const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
@@ -33,8 +34,11 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <SocketProvider>
+
             <ModalProvider />
+            <QueryProvider>
             {children}
+            </QueryProvider>
             </SocketProvider>
           </ThemeProvider>
       </body>
