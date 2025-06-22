@@ -7,15 +7,16 @@ interface InviteCodePageProps {
     params: { inviteCode: string }
 }
 const InviteCodePage = async ({params}: InviteCodePageProps) => {
+     const { inviteCode } = params;
     const user = await getCurrentUser();
 
     if(!user) return redirect("/login");
 
-    if(!params.inviteCode) return redirect("/");
+    if(!inviteCode) return redirect("/");
 
     const existingServer = await prisma.server.findFirst({
         where: {
-            inviteCode: params.inviteCode,
+            inviteCode: inviteCode,
             members: {
                 some: {
                     userId: user.id
@@ -28,7 +29,7 @@ const InviteCodePage = async ({params}: InviteCodePageProps) => {
 
     const server = await prisma.server.update({
         where: {
-            inviteCode: params.inviteCode
+            inviteCode: inviteCode
         },
         data: {
             members: {
