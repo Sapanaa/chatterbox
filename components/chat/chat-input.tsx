@@ -53,7 +53,7 @@ const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
   };
 
   return (
-    <div className="px-4 py-3 bg-white dark:bg-[#313338] border-t border-zinc-200 dark:border-zinc-700">
+    <div className="absolute bottom-0 left-0 w-full px-4 py-3 bg-white dark:bg-[#313338] border-t border-zinc-200 dark:border-zinc-700 z-50">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-2">
           <button

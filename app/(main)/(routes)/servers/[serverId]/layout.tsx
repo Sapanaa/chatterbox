@@ -3,9 +3,9 @@ import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import ServerSidebar from "@/components/server/server-sidebar";
 
-const serverLayout = async (props: { children: React.ReactNode; params: { serverId: string } }) => {
+const serverLayout = async (props: { children: React.ReactNode; params: Promise<{ serverId: string }> }) => {
   const { children, params } = props;
-  const serverId = params.serverId;
+  const {serverId} = await params;
 
   const user = await getCurrentUser();
 
